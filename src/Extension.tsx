@@ -1,4 +1,14 @@
-export const Extension = ({logo, name, description, toggleId}) => {
+export const Extension = ({
+    logo,
+    name,
+    description,
+    toggleId
+}: {
+    logo: string;
+    name: string;
+    description: string;
+    toggleId: string;
+}) => {
     <div className="extension">
         <div className="top">
             <div className="logo">

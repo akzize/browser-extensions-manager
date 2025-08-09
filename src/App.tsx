@@ -18,6 +18,7 @@ function App() {
   const [extensions, setExtensions] = useState([] as Extension[]);
   // const [filteredExtensions, setFilteredExtensions] = useState([] as Extension[]);
   const [selectedFilter, setSelectedFilter] = useState("all");
+  const [appTheme, setAppTheme] = useState("light");
   useEffect(() => {
     let id = 1;
     const extensionsList = data.map((extension) => {
@@ -35,6 +36,8 @@ function App() {
     if (selectedFilter === "inactive") return !ext.isActive;
     return true; // "all"
   });
+
+
 
   // handle extension remove
   function removeExtension(id: number) {
@@ -60,6 +63,10 @@ function App() {
     setSelectedFilter(filter);
     // setFilteredExtensions(filteredList)
   }
+
+  function handleThemeToggle() {
+    setAppTheme(appTheme == "light" ? "dark" : "light");
+  }
   return (
     <>
       <div className="container">
@@ -68,8 +75,8 @@ function App() {
             <img src={image} alt="" />
           </div>
           <div className="theme-switcher">
-            <button>
-              <img src={DarkModeImg} alt="" />
+            <button onClick={handleThemeToggle}>
+              <img src={appTheme == "light" ? DarkModeImg : LightModeImg} alt="" />
             </button>
           </div>
         </header>
