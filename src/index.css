@@ -210,8 +210,14 @@ button {
     border-color: var(--red_700);
     color: var(--neutral_0);
   }
+
 }
 
+.active {
+  background-color: var(--red_700);
+    border-color: var(--red_700);
+    color: var(--neutral_0);
+}
 .attribution {
   padding: 35px 10px;
   text-align: center;
