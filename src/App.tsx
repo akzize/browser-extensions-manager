@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import './App.css'
 import data from "./data/data.json";
 import image from "./assets/images/logo.svg"
 import DarkModeImg from "./assets/images/icon-moon.svg"
 import LightModeImg from "./assets/images/icon-sun.svg"
 import { Extension } from './Extension.jsx';
+import { ThemeContext } from './context/ThemeContext.js';
 
 interface Extension {
   id: number;
@@ -18,7 +19,7 @@ function App() {
   const [extensions, setExtensions] = useState([] as Extension[]);
   // const [filteredExtensions, setFilteredExtensions] = useState([] as Extension[]);
   const [selectedFilter, setSelectedFilter] = useState("all");
-  const [appTheme, setAppTheme] = useState("light");
+  const {theme, toggleTheme} = useContext(ThemeContext)
   useEffect(() => {
     let id = 1;
     const extensionsList = data.map((extension) => {
@@ -28,8 +29,11 @@ function App() {
     setExtensions(extensionsList)
     // setFilteredExtensions(extensionsList);
     console.log(extensionsList);
-  }, [])
 
+    // set the theme
+  }, [])
+  
+  document.body.classList.add(theme)
   // Derived value for filtered list
   const filteredExtensions = extensions.filter(ext => {
     if (selectedFilter === "active") return ext.isActive;
@@ -47,9 +51,17 @@ function App() {
   }
 
   function toggleExtension(id: number) {
-    setExtensions(extensions.map((extension) => {
-      return extension.id === id ? { ...extension, isActive: !extension.isActive } : extension
-    }))
+    if (selectedFilter === "inactive") {
+      setTimeout(() => {
+        setExtensions(extensions.map((extension) => {
+          return extension.id === id ? { ...extension, isActive: !extension.isActive } : extension
+        }))    
+      }, 500);
+    }else {
+      setExtensions(extensions.map((extension) => {
+        return extension.id === id ? { ...extension, isActive: !extension.isActive } : extension
+      }))
+    }
   }
 
   function toggleFilter(filter: string) {
@@ -64,19 +76,16 @@ function App() {
     // setFilteredExtensions(filteredList)
   }
 
-  function handleThemeToggle() {
-    setAppTheme(appTheme == "light" ? "dark" : "light");
-  }
   return (
-    <>
+    <main className={theme}>
       <div className="container">
         <header>
           <div className="log">
             <img src={image} alt="" />
           </div>
           <div className="theme-switcher">
-            <button onClick={handleThemeToggle}>
-              <img src={appTheme == "light" ? DarkModeImg : LightModeImg} alt="" />
+            <button onClick={toggleTheme}>
+              <img src={theme == "light" ? DarkModeImg : LightModeImg} alt="" />
             </button>
           </div>
         </header>
@@ -125,7 +134,7 @@ function App() {
           Coded by <a href="https://github.com/akzize">Zakaria Akziz</a>.
         </div>
       </div>
-    </>
+    </main>
   )
 }
 
